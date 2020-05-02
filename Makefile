@@ -403,7 +403,7 @@ endif
 
 CFLAGS += -D__STDC_CONSTANT_MACROS
 
-LIBS := $(LIBS) $(shell $(PKG_CONFIG) --libs $(TEMP_LIBS))
+LIBS := $(LIBS) $(shell $(PKG_CONFIG) --libs $(TEMP_LIBS)) -lgo2
 CFLAGS := $(CFLAGS) $(shell $(PKG_CONFIG) --cflags $(TEMP_LIBS))
 
 EXE = $(EXE_BASE)$(EXE_EXT)

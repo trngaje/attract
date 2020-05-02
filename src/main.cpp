@@ -325,6 +325,8 @@ int main(int argc, char *argv[])
 				soundsys.play_ambient();
 
 				has_focus=true;
+				printf("[trngaje] main.cpp: feVM.load_layout\n");
+				feVM.load_layout();
 			}
 
 			launch_game=false;
