@@ -142,7 +142,7 @@ void FeWindow::onCreate()
 	else
 		setVerticalSyncEnabled(true);
 #else
-	setVerticalSyncEnabled(true);
+	setVerticalSyncEnabled(false); // by trngaje (true);
 #endif
 	setKeyRepeatEnabled(false);
 	setMouseCursorVisible(false);
@@ -188,7 +188,7 @@ void FeWindow::initial_create()
 	sf::Vector2i wpos( 0, 0 );  // position to set window to
 
 	bool do_multimon = is_multimon_config( m_fes );
-	m_win_mode = m_fes.get_window_mode();
+	m_win_mode = FeSettings::Default; // by trngaje m_fes.get_window_mode();
 
 #if defined(USE_XLIB)
 
@@ -319,7 +319,7 @@ void FeWindow::initial_create()
 		m_blackout.create(sf::VideoMode(16, 16, 24), "", sf::Style::None);
 		m_blackout.setSize( sf::Vector2u( vm.width + 2, vm.height + 2 ));
 		m_blackout.setPosition( sf::Vector2i( -1, -1 ));
-		m_blackout.setVerticalSyncEnabled(true);
+		m_blackout.setVerticalSyncEnabled(false); // by trngaje, (true);
 		m_blackout.setKeyRepeatEnabled(false);
 		m_blackout.setMouseCursorVisible(false);
 
@@ -335,7 +335,8 @@ void FeWindow::initial_create()
 	//
 	// Create window
 	//
-	create( vm, "Attract-Mode", style_map[ m_win_mode ] );
+	create( vm, "Attract-Mode", sf::Style::None/*style_map[ m_win_mode ]*/ ); // by trngaje
+
 
 	// We need to clear and display here before calling setSize and setPosition
 	// to avoid a white window flash on launching Attract Mode.
@@ -352,11 +353,12 @@ void FeWindow::initial_create()
 
 	// Known issue: Linux Mint 18.3 Cinnamon w/ SFML 2.5.1, position isn't being set
 	// (Window always winds up at 0,0)
-	setPosition( wpos );
-
+//	setPosition( wpos ); // by trngaje
+/*
 	FeDebug() << "Created Attract-Mode Window: " << wsize.x << "x" << wsize.y << " @ "
 		<< wpos.x << "," << wpos.y << " [OpenGL surface: "
 		<< vm.width << "x" << vm.height << " bpp=" << vm.bitsPerPixel << "]" << std::endl;
+*/ // by trngaje
 
 #if defined(SFML_SYSTEM_WINDOWS)
 
@@ -387,7 +389,8 @@ void launch_callback( void *o )
 {
 #if defined(SFML_SYSTEM_LINUX)
 	FeWindow *win = (FeWindow *)o;
-	if ( win->m_fes.get_window_mode() == FeSettings::Fullscreen )
+	// removed by trngaje
+	if (0) //( win->m_fes.get_window_mode() == FeSettings::Fullscreen )
 	{
 		//
 		// On X11 Linux, fullscreen mode is confirmed to block the emulator
@@ -503,6 +506,26 @@ bool FeWindow::run()
 			FeLog() << " - Working directory: " << work_dir << std::endl;
 
 		FeLog() << "*** Running: " << command << " " << args << std::endl;
+		
+#if 0
+
+		close();
+		
+		const char *ccommand = command.c_str();
+		const char *cargs = args.c_str();
+		const char *cwork_dir = work_dir.c_str();
+		
+		char cmixedcommand[1024];
+		
+		sprintf(cmixedcommand, "%s %s", ccommand, cargs);
+		printf("[trngaje] ccomannd = %s, cargs = %s, cwork_dir = %s\n", ccommand, cargs, cwork_dir);
+		
+		// replace run_program as system
+		system(cmixedcommand);
+		
+		initial_create();
+#else
+		close();	
 
 		run_program(
 			command,
@@ -512,6 +535,10 @@ bool FeWindow::run()
 			NULL,
 			( nbm_wait <= 0 ), // don't block if nbm_wait > 0
 			&opt );
+			
+		
+		initial_create();
+#endif
 	}
 
 	if ( opt.running_pid != 0 )
@@ -600,7 +627,8 @@ bool FeWindow::run()
 		m_fes.update_stats( 1, timer.getElapsedTime().asSeconds() );
 
 #if defined(SFML_SYSTEM_LINUX)
-	if ( m_fes.get_window_mode() == FeSettings::Fullscreen )
+	// removed by trngaje
+	if (0) //( m_fes.get_window_mode() == FeSettings::Fullscreen )
 	{
  #if defined(USE_XLIB)
 		//

@@ -325,7 +325,8 @@ int main(int argc, char *argv[])
 				soundsys.play_ambient();
 
 				has_focus=true;
-				printf("[trngaje] main.cpp: feVM.load_layout\n");
+				//printf("[trngaje] main.cpp: feVM.load_layout\n");
+				def_font.set_font( def_font_path, def_font_file );
 				feVM.load_layout();
 			}
 

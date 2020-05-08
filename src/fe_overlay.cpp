@@ -223,7 +223,7 @@ void FeOverlay::get_common(
 		scale_factor = 1.f;
 
 	text_scale.x = text_scale.y = 1.f / scale_factor;
-	char_size = (size.y / 14) * scale_factor;
+	char_size = (size.y / 10/*14*/) * scale_factor; // by trngaje, this parameter is for text size in configuration
 }
 
 void FeOverlay::splash_message( const std::string &msg,
